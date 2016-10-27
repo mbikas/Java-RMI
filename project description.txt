@@ -1,0 +1,5 @@
+Project Description:
+
+You will explore how the concept of referential integrity works in RMI. As the RMI specification states, “if two references to an object are passed from one JVM to another JVM in parameters (or in the return value) in a single remote method call and those references refer to the same object in the sending JVM, those references will refer to a single copy of the object in the receiving JVM. More generally stated: within a single remote method call, the RMI system maintains referential integrity among the objects passed as parameters or as a return value in the call.”
+
+You will implement a system of distributed objects in Java of your choosing – that is, just like in the course project, you will select specific domains and create multiple distributed objects in JVMs that communicate using RMI. For example, client processes represent patients who contact a health exchange that service hospital remote objects that in turn are clients to other distributed objects that represent doctors who in turn are clients to distributed objects that represent insurance companies that may be clients to hospital

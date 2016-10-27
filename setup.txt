@@ -1,0 +1,65 @@
+How to Run Using Executable Jar
+——————————————————————————————
+— Open Hospital.jar, Insurance.jar and HealthExchange.jar to start the servers. These servers can be deployed in any PC.
+— Insurance and HealthExchange will act as both server and client.
+— IP address and port number of each server is configurable through the UI
+— Patient.jar is the client. Input/Edit the HealthExchange Server ip address, port Number and enter the client name. Upon pressing the Get Doctor button it will get the doctor name in the following sequence: 
+	Client -> Health Exchange -> Insurance Company -> Hospital
+	
+Note: To run the jar file in mac use the following command:
+java -jar jarName.jar
+
+
+
+How to Compile and Run in Eclipse
+———————————————————————————————————
+1. First kill the process running in port 5001, 5002, 5003 (if required)
+	lsof -P | grep ':5001' | awk '{print $2}' | xargs kill
+	lsof -P | grep ':5002' | awk '{print $2}' | xargs kill
+	lsof -P | grep ':5001' | awk '{print $2}' | xargs kill
+2. Open the projects using eclipse 
+	- File -> Import -> General -> Existing Projects into Workspace -> Select the root directory of the projects -> Finish
+3. 
+Right Click HospitalServer.java class -> Run As -> Java Application
+	— Press Start Hospital button to start the hospital server
+Right Click InsuranceServer.java class -> Run As -> Java Application
+	— Press Start Hospital button to start the Insurance server
+Right Click HealthExchangeServer.java class -> Run As -> Java Application
+	— Press Start Health Exchange button to start the Doctor server
+4. Finally Run the Client PatientClient to see the output in GUI
+	— Right Click PatientClient.java class -> Run As -> Java Application
+     — Test with different input parameters 
+	
+
+
+
+Implementation of getting a doctor for any Patient using distributed RMI
+————————————————————————————————————————————————————————————
+Workflow: PatientClient -> HealthExchangeServer -> InsuranceServer -> HospitalServer
+
+PatientClient, HealthExchangeServer, InsuranceServer and HospitalServer classes implements a common interface DoctorInterface which only have a single abstract method getDoctor(Object object)
+
+
+Hospital Server:
+HospitalImplementaion: implementation of DoctorInterface. Returns Dr. X if patient name contains Bikas otherwise returns Dr. Y
+HospitalServer: create registry entry to the port 5003, bind the HospitalImplementaion interface and it starts listening for incoming client (Insurance)
+
+Insurance Server:
+InsuranceImplementaion: implementation of DoctorInterface. Invokes HospitalServer using Hospital server ip and port to get the doctor name
+InsuranceServer: create registry entry to the port 5002, bind the InsuranceImplementaion interface and it starts listening for incoming client (Doctor)
+
+HealthExchange Server:
+HealthExchangeImplementaion: implementation of DoctorInterface. Invokes InsuranceServer using HealthExchange Server ip and port to get the doctor name
+HealthExchangeServer: create registry entry to the port 5001, bind the HealthExchangeImplementaion interface and it starts listening for incoming client (Patient)
+
+Patient Client:
+Invokes HealthExchangeServer using HealthExchange Server ip, port to get the doctor name and it passes the patient object (in this implementation just for the sake of simplicity passed a String object containing the name of the patient) through DoctorInterface
+
+
+Submitted By
+——————
+Md Abu Naser Bikas
+UIN: 651644268
+mbikas2@uic.edu
+
+
